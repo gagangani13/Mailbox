@@ -1,40 +1,21 @@
-import React, { useState,useEffect } from 'react'
-import { useSelector } from 'react-redux'
+import React, { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import Mails from './Mails'
-import NoMails from './NoMails'
+import { loadFromFirebaseThunk } from '../Store/welcomeSlice'
 const Inbox = (props) => {
-    const [mails,setMails]=useState([])
-    const sentByEmail=useSelector((state)=>state.authenticate.login).replace(/[@.]/g,"")
-    async function loadInbox(props){
-        const response=await fetch(`https://mailbox-6509c-default-rtdb.firebaseio.com/${sentByEmail}/inbox.json`)
-        const data=await response.json()
-        try {
-            if(response.ok){
-                console.log(data)
-                !data&&setMails(null)
-                if(data){
-                    const messages=[]
-                    for(const item in data){
-                        messages.unshift({message:data[item].message,subject:data[item].subject,email:data[item].senderEmailId,who:'From',date:data[item].date})
-                    }
-                    setMails(messages)
-                }
-            }else{
-                throw new Error()
-            }
-        }catch(error){
-            alert(data.error.message)
-        }
-    }
+    const dispatch=useDispatch()
+    const inboxMails=useSelector((state)=>state.welcomeReducer.inbox)
+    const sentMails=useSelector((state)=>state.welcomeReducer.sent)
+    const sentByEmail=localStorage.getItem('senderEmailId').replace(/[@.]/g,"")
+    const option=useSelector((state)=>state.welcomeReducer.options)
+    const mails=(option==='inbox')?inboxMails:sentMails
     useEffect(()=>{
-        loadInbox()
-        // eslint-disable-next-line
-    },[])
+        dispatch(loadFromFirebaseThunk(sentByEmail,option))
+    },[option,dispatch,sentByEmail])
   return (
     <>
-      <h4>INBOX</h4>
-      {!mails&&<NoMails option={props.option}/>}
-      {mails&&<Mails mails={mails}/>}
+      <h4>{option==='inbox'?'INBOX':'SENT'}</h4>
+      {<Mails mails={mails} empty={props.empty}/>}
     </>
   )
 }
