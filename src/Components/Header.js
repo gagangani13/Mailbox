@@ -4,44 +4,18 @@ import { useDispatch, useSelector } from "react-redux";
 import { welcomeAction } from "./Store/welcomeSlice";
 import { authAction } from "./Store/authSlice";
 import { Route, Redirect } from "react-router-dom";
+import useFetch from "./useFetch";
 const Header = () => {
   const dispatch = useDispatch();
   const option = useSelector((state) => state.welcomeReducer.options);
-  const count = useSelector((state) => state.welcomeReducer.count);
+  // const count = useSelector((state) => state.welcomeReducer.count);
   const loggingOut = useSelector((state) => state.authenticate.login);
   let sentByEmail;
   if(localStorage.getItem("senderEmailId")!==null){
     sentByEmail = localStorage.getItem("senderEmailId").replace(/[@.]/g, "");
   } 
-  async function loadInbox(){
-    const response = await fetch(
-      `https://mailbox-6509c-default-rtdb.firebaseio.com/${sentByEmail}/inbox.json`
-    );
-    const data = await response.json();
-    
-    try {
-      if(data !== null){
-        if (response.ok) {
-            let counter = 0;
-            for (const item in data) {
-                if (data[item].unread === "true") {
-                    counter = counter + 1;
-                }
-            }
-            dispatch(welcomeAction.updateCount(counter));
-        } else {
-            throw new Error("empty");
-        }
-      }else {
-        throw new Error("empty");
-      }
-    } catch (error) {
-      dispatch(welcomeAction.updateCount(0));
-    }
-    clearTimeout()
-    
-}
-  setInterval(loadInbox,5000);
+  
+  const count=useFetch(sentByEmail)
 
   function setOption(e) {
     dispatch(
