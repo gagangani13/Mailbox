@@ -6,7 +6,10 @@ const Inbox = (props) => {
     const dispatch=useDispatch()
     const inboxMails=useSelector((state)=>state.welcomeReducer.inbox)
     const sentMails=useSelector((state)=>state.welcomeReducer.sent)
-    const sentByEmail=localStorage.getItem('senderEmailId').replace(/[@.]/g,"")
+    let sentByEmail
+    if(localStorage.getItem("senderEmailId")!==null){
+      sentByEmail = localStorage.getItem("senderEmailId").replace(/[@.]/g, "");
+    }
     const option=useSelector((state)=>state.welcomeReducer.options)
     const mails=(option==='inbox')?inboxMails:sentMails
     useEffect(()=>{
