@@ -99,10 +99,9 @@ const LOGIN = () => {
           emailRef.current.value = "";
           passwordRef.current.value = "";
           const token = localStorage.setItem("idToken", data.idToken);
-          const sentByEmail = localStorage.setItem("sentByEmail", data.email.replace(/[@.]/g,""));
-          dispatch(authAction.loginHandler());
+          const senderEmailId=localStorage.setItem('senderEmailId',data.email)
+          dispatch(authAction.loginHandler(senderEmailId));
           dispatch(authAction.setToken(token));
-          dispatch(authAction.setSentByEmail(sentByEmail));
         } else {
           throw new Error();
         }
@@ -199,7 +198,7 @@ const LOGIN = () => {
           </Card>
           ;
         </Form>
-        {loginState && (
+        {loginState!==null && (
           <Route>
             <Redirect to="/WELCOME" />
           </Route>

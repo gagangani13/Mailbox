@@ -3,10 +3,10 @@ import React, { useRef, useState } from "react";
 import { Button, Form, Row, Col } from "react-bootstrap";
 import { Editor } from "react-draft-wysiwyg";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import { useSelector } from "react-redux";
+// import { useSelector } from "react-redux";
 const Mailbox = () => {
-    const sentByEmail=useSelector((state)=>state.authenticate.sentByEmail)
-    console.log(sentByEmail)
+    const senderEmailId=localStorage.getItem('senderEmailId')
+    const senderFirebaseId=senderEmailId.replace(/[@.]/g,"")
     const emailRef=useRef()
     const subjectRef=useRef()
     const[editorState,setEditorState]=useState(()=>EditorState.createEmpty())
@@ -16,8 +16,8 @@ const Mailbox = () => {
     async function sendMail(e) {
         e.preventDefault()
         const receiverEmail=emailRef.current.value.replace(/[@.]/g,"")
-        const details={subject:subjectRef.current.value,message:editorState.getCurrentContent().getPlainText()}
-        const sender=await fetch(`https://mailbox-6509c-default-rtdb.firebaseio.com/${sentByEmail}/sent.json`,{
+        const details={subject:subjectRef.current.value,message:editorState.getCurrentContent().getPlainText(),senderEmailId:senderEmailId,receiverEmailId:emailRef.current.value,date:new Date()}
+        const sender=await fetch(`https://mailbox-6509c-default-rtdb.firebaseio.com/${senderFirebaseId}/sent.json`,{
             method:'POST',
             body:JSON.stringify(details)
         })
@@ -51,18 +51,11 @@ const Mailbox = () => {
     }
 
   return (
-    <div
-      style={{
-        top: "10rem",
-        position: "absolute",
-        width: "70vw",
-        left: "15vw",
-      }}
-    >
-      <h4>Send Email</h4>
+    <>
+      <h4>COMPOSE EMAIL</h4>
       <Form style={{
-        backgroundColor: "white",
-        color: "black",}} onSubmit={sendMail}>
+          backgroundColor: "white",
+          color: "black",}} onSubmit={sendMail}>
         <Row style={{ display: " -webkit-box" }}>
           <Col className="m-auto">To:</Col>
           <Col className="col-11">
@@ -85,10 +78,10 @@ const Mailbox = () => {
           onEditorStateChange={editorHandler}
           placeholder="Type your message here..."
           required
-        />
-        <Button type='submit'>Send</Button>
+          />
+        <Button type='submit'className='m-2'>Send</Button>
       </Form>
-    </div>
+      </>
   );
 };
 

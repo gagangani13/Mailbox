@@ -10,12 +10,11 @@ const Header = () => {
     const loggingOut=useSelector((state)=>state.authenticate.login)
     function setOption(e) {
         dispatch(welcomeAction.setOptions(e.target.value))
-        console.log(option)
     }
     function logoutHandler(){
-        dispatch(authAction.logoutHandler())
+        dispatch(authAction.loginHandler(null))
         localStorage.removeItem('idToken')
-        localStorage.removeItem('sentByEmail')
+        localStorage.removeItem('senderEmailId')
     }
   return (
     <div style={{position:'fixed'}}>
