@@ -3,12 +3,16 @@ import React, { useRef, useState } from "react";
 import { Button, Form, Row, Col } from "react-bootstrap";
 import { Editor } from "react-draft-wysiwyg";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-// import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { loadFromFirebaseThunk } from "../Store/welcomeSlice";
+import { useSelector } from "react-redux";
 const Mailbox = () => {
     const senderEmailId=localStorage.getItem('senderEmailId')
     const senderFirebaseId=senderEmailId.replace(/[@.]/g,"")
+    const option=useSelector((state)=>state.welcomeReducer.options)
     const emailRef=useRef()
     const subjectRef=useRef()
+    const dispatch=useDispatch()
     const[editorState,setEditorState]=useState(()=>EditorState.createEmpty())
     const editorHandler=(editorState)=>{
         setEditorState(editorState)
@@ -16,7 +20,7 @@ const Mailbox = () => {
     async function sendMail(e) {
         e.preventDefault()
         const receiverEmail=emailRef.current.value.replace(/[@.]/g,"")
-        const details={subject:subjectRef.current.value,message:editorState.getCurrentContent().getPlainText(),senderEmailId:senderEmailId,receiverEmailId:emailRef.current.value,date:new Date()}
+        const details={subject:subjectRef.current.value,message:editorState.getCurrentContent().getPlainText(),senderEmailId:senderEmailId,receiverEmailId:emailRef.current.value,date:new Date(),unread:'true'}
         const sender=await fetch(`https://mailbox-6509c-default-rtdb.firebaseio.com/${senderFirebaseId}/sent.json`,{
             method:'POST',
             body:JSON.stringify(details)
@@ -32,6 +36,7 @@ const Mailbox = () => {
                 try {
                     if(receiver.ok){
                         alert('Email sent successfully')    
+                        dispatch(loadFromFirebaseThunk(senderFirebaseId,option))
                         emailRef.current.value=''
                         subjectRef.current.value=''
                         setEditorState('')

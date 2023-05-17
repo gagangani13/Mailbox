@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { authAction } from "../Store/authSlice";
 import Header from "../Header";
 import Inbox from "./Inbox";
-import Sent from "./Sent";
+// import { loadFromFirebaseThunk } from "../Store/welcomeSlice";
 const WELCOME = () => {
   const dispatch = useDispatch();
   const option = useSelector((state) => state.welcomeReducer.options);
@@ -30,8 +30,8 @@ const WELCOME = () => {
         }}
       >
         {option === "compose" && <Mailbox />}
-        {option === "inbox" && <Inbox option='No Emails received in Inbox'/>}
-        {option === "sent" && <Sent option='No Emails are sent' />}
+        {option === "inbox" && <Inbox empty='No Emails received in Inbox'/>}
+        {option === "sent" && <Inbox empty='No Emails are sent' />}
       </div>
     </>
   );
