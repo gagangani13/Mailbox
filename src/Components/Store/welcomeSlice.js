@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-const welcomeInitialState={ options: "inbox", inbox: null,sent:null ,count: 0 }
+const welcomeInitialState={ options: "compose", inbox: null,sent:null ,count: 0 }
 const welcomeSlice = createSlice({
   name: "Welcome page",
   initialState: welcomeInitialState,

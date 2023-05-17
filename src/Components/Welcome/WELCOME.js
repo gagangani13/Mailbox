@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { authAction } from "../Store/authSlice";
 import Header from "../Header";
 import Inbox from "./Inbox";
-// import { loadFromFirebaseThunk } from "../Store/welcomeSlice";
+
 const WELCOME = () => {
   const dispatch = useDispatch();
   const option = useSelector((state) => state.welcomeReducer.options);
