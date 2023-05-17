@@ -31,7 +31,7 @@ const LOGIN = () => {
     if (!login) {
       if (passwordRef.current.value === confirmRef.current.value) {
         const response = await fetch(
-          `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyBXPzqlI6fvUIQX7LiIqUK-vdC_dfWQ0q8`,
+          `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyCmmeJgXKnKHIweaNdNZLYPtiHk4wtGRlE`,
           {
             method: "POST",
             body: JSON.stringify({
@@ -60,7 +60,7 @@ const LOGIN = () => {
       }
     } else if (login && newPassword) {
       const response = await fetch(
-        `https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=AIzaSyBXPzqlI6fvUIQX7LiIqUK-vdC_dfWQ0q8`,
+        `https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=AIzaSyCmmeJgXKnKHIweaNdNZLYPtiHk4wtGRlE`,
         {
           method: "POST",
           body: JSON.stringify({
@@ -83,7 +83,7 @@ const LOGIN = () => {
       }
     } else {
       const response = await fetch(
-        `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyBXPzqlI6fvUIQX7LiIqUK-vdC_dfWQ0q8`,
+        `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyCmmeJgXKnKHIweaNdNZLYPtiHk4wtGRlE`,
         {
           method: "POST",
           body: JSON.stringify({
@@ -99,10 +99,10 @@ const LOGIN = () => {
           emailRef.current.value = "";
           passwordRef.current.value = "";
           const token = localStorage.setItem("idToken", data.idToken);
-          const userId = localStorage.setItem("userId", data.localId);
+          const sentByEmail = localStorage.setItem("sentByEmail", data.email.replace(/[@.]/g,""));
           dispatch(authAction.loginHandler());
           dispatch(authAction.setToken(token));
-          dispatch(authAction.setUserId(userId));
+          dispatch(authAction.setSentByEmail(sentByEmail));
         } else {
           throw new Error();
         }
