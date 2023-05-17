@@ -3,6 +3,7 @@ import LOGIN from "./Components/Login/LOGIN";
 import { Switch,Route,  } from "react-router-dom";
 import { Provider } from "react-redux";
 import store from "./Components/Store/store";
+import WELCOME from "./Components/Welcome/WELCOME";
 const App = () => {
   return (
     <>
@@ -13,6 +14,9 @@ const App = () => {
         <Switch>
           <Route path="/" exact>
             <LOGIN/>
+          </Route>
+          <Route path="/WELCOME" exact>
+            <WELCOME/>
           </Route>
         </Switch>
     </Provider>
