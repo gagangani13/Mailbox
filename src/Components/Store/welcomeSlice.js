@@ -1,7 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
+const welcomeInitialState={ options: "inbox", inbox: null,sent:null ,count: 0 }
 const welcomeSlice = createSlice({
   name: "Welcome page",
-  initialState: { options: "inbox", inbox: null,sent:null ,count: 0 },
+  initialState: welcomeInitialState,
   reducers: {
     setOptions(state, action) {
       state.options = action.payload;
@@ -47,6 +48,9 @@ export const loadFromFirebaseThunk = (sentByEmail, option) => {
           }
           option==='inbox'&&dispatch(welcomeAction.setInbox(messages))
           option==='sent'&&dispatch(welcomeAction.setSent(messages));
+        }else{
+            option==='inbox'&&dispatch(welcomeAction.setInbox(null))
+            option==='sent'&&dispatch(welcomeAction.setSent(null));
         }
       } else {
         throw new Error();

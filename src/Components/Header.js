@@ -19,6 +19,8 @@ const Header = () => {
     }, 0);
     console.log(counter);
     dispatch(welcomeAction.updateCount(counter));
+  }else if(option==='inbox'&&mails===null){
+    dispatch(welcomeAction.updateCount(0))
   }
   function setOption(e) {
     dispatch(

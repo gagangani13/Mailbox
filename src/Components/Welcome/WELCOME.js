@@ -30,7 +30,7 @@ const WELCOME = () => {
         }}
       >
         {option === "compose" && <Mailbox />}
-        {option === "inbox" && <Inbox empty='No Emails received in Inbox'/>}
+        {option === "inbox" && <Inbox empty='No Emails to read'/>}
         {option === "sent" && <Inbox empty='No Emails are sent' />}
       </div>
     </>

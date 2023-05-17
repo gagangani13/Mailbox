@@ -29,6 +29,22 @@ const Mails = (props) => {
             }
         }
     }
+    async function deleteMail(e) {
+        const Id=e.target.parentElement.parentElement.id
+        const response=await fetch(`https://mailbox-6509c-default-rtdb.firebaseio.com/${sentByEmail}/${option}/${Id}.json`,{
+                method:'DELETE',
+            })
+            const data=await response.json()
+            try {
+                if(response.ok){
+                    dispatch(loadFromFirebaseThunk(sentByEmail,option))
+                }else{
+                    throw new Error()
+                }
+            } catch (error) {
+                alert(data.error.message)
+            }
+    }
   return (
     <>
     {props.mails!==null&&props.mails.map((item)=>{
@@ -41,6 +57,7 @@ const Mails = (props) => {
                 <Col style={{fontWeight:'bold'}}>{item.subject}</Col>
                 {/* <Col>{item.date}</Col> */}
                 <Col className='col-1'><button class={`fa-solid fa-circle-chevron-down ${message===item.Id?'fa-rotate-180':''} m-2 p-2`} onClick={showMessage} id={item.unread}></button></Col>
+                <Col className='col-1'><button class="fa-solid fa-trash-can m-2 p-2" style={{color:'red'}} onClick={deleteMail} ></button></Col>
             </Row>
         </Card.Body>
         {message===item.Id&&<Card.Body>
